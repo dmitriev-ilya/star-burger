@@ -1,10 +1,9 @@
-import json
-
 from django.http import JsonResponse
 from django.templatetags.static import static
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework import status
 
 from .models import Product
 from .models import Order
@@ -64,20 +63,34 @@ def product_list_api(request):
 
 @api_view(['POST'])
 def register_order(request):
-    order_details = request.data
-    print(order_details)
-    order = Order.objects.create(
-        firstname=order_details.get('firstname'),
-        lastname=order_details.get('lastname', ''),
-        phonenumber=order_details.get('phonenumber'),
-        address=order_details.get('address'),
-    )
-
-    for product_detail in order_details.get('products', []):
-        product = get_object_or_404(Product, pk=product_detail['product'])
-        order.products.create(
-            product=product,
-            quantity=product_detail['quantity']
+    try:
+        order_details = request.data
+        if not order_details.get('products'):
+            raise IndexError
+        if not isinstance(order_details['products'], list):
+            raise TypeError
+               
+        order = Order.objects.create(
+            firstname=order_details.get('firstname'),
+            lastname=order_details.get('lastname', ''),
+            phonenumber=order_details.get('phonenumber'),
+            address=order_details.get('address'),
         )
+        for product_detail in order_details['products']:
+            product = get_object_or_404(Product, pk=product_detail['product'])
+            order.products.create(
+                product=product,
+                quantity=product_detail['quantity']
+            )
+        return Response(order_details)
 
-    return Response(order_details)
+    except TypeError:
+        return Response(
+            {'error': 'products key is not presented or not list'},
+            status=status.HTTP_451_UNAVAILABLE_FOR_LEGAL_REASONS
+        )
+    except IndexError:
+        return Response(
+            {'error': 'products can not be empty'},
+            status=status.HTTP_451_UNAVAILABLE_FOR_LEGAL_REASONS
+        )
