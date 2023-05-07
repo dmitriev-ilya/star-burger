@@ -68,7 +68,7 @@ def register_order(request):
 
     order = Order.objects.create(
         firstname=order_details['firstname'],
-        lastname=order_details.get('lastname', ''),
+        lastname=order_details['lastname'],
         phonenumber=order_details['phonenumber'],
         address=order_details['address']
     )
@@ -78,4 +78,10 @@ def register_order(request):
             product=product,
             quantity=product_detail['quantity']
         )
-    return Response(order_details)
+    return Response({
+        'id': order.id,
+        'firstname': order_details['firstname'],
+        'lastname': order_details['lastname'],
+        'phonenumber': order_details['phonenumber'],
+        'address': order_details['address']
+    })
