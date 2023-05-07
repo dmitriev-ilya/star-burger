@@ -3,11 +3,9 @@ from django.templatetags.static import static
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework import status
-from phonenumber_field.phonenumber import PhoneNumber
 
-from .models import Product
-from .models import Order
+from .models import Product, Order
+from .serializers import OrderSerializer
 
 
 def banners_list_api(request):
@@ -64,49 +62,20 @@ def product_list_api(request):
 
 @api_view(['POST'])
 def register_order(request):
-    try:
-        order_details = request.data
-        empty_fields = []
-        if not order_details.get('products'):
-            empty_fields.append('products')
-        if not order_details.get('firstname'):
-            empty_fields.append('firstname')
-        if not order_details.get('address'):
-            empty_fields.append('address')
-        if not order_details.get('phonenumber'):
-            empty_fields.append('phonenumber')
-        if empty_fields:
-            return Response(
-                {'error': f'{", ".join(empty_fields)} can not be empty'},
-                status=status.HTTP_451_UNAVAILABLE_FOR_LEGAL_REASONS
-            )
-        if not isinstance(order_details['products'], list) \
-        or not isinstance(order_details['firstname'], str) \
-        or not isinstance(order_details['address'], str):
-            raise TypeError
+    serializer = OrderSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    order_details = serializer.validated_data
 
-        phonenumber = PhoneNumber.from_string(order_details.get('phonenumber'), region='RU')
-        if not phonenumber.is_valid():
-            return Response(
-                {'error': 'not valid phonenumber'},
-                status=status.HTTP_451_UNAVAILABLE_FOR_LEGAL_REASONS
-            )
-        order = Order.objects.create(
-            firstname=order_details['firstname'],
-            lastname=order_details.get('lastname', ''),
-            phonenumber=phonenumber,
-            address=order_details['address']
+    order = Order.objects.create(
+        firstname=order_details['firstname'],
+        lastname=order_details.get('lastname', ''),
+        phonenumber=order_details['phonenumber'],
+        address=order_details['address']
+    )
+    for product_detail in order_details['products']:
+        product = get_object_or_404(Product, pk=product_detail['product'])
+        order.products.create(
+            product=product,
+            quantity=product_detail['quantity']
         )
-        for product_detail in order_details['products']:
-            product = get_object_or_404(Product, pk=product_detail['product'])
-            order.products.create(
-                product=product,
-                quantity=product_detail['quantity']
-            )
-        return Response(order_details)
-
-    except TypeError:
-        return Response(
-            {'error': 'check value type'},
-            status=status.HTTP_451_UNAVAILABLE_FOR_LEGAL_REASONS
-        )
+    return Response(order_details)
