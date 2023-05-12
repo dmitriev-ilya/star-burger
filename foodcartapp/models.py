@@ -165,6 +165,10 @@ class Order(models.Model):
         'адрес доставки',
         max_length=150
     )
+    comment = models.TextField(
+        'комментарий к заказу',
+        blank=True
+    )
 
     objects = OrderQuerySet.as_manager()
 
