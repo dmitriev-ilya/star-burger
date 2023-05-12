@@ -135,6 +135,19 @@ class OrderQuerySet(models.QuerySet):
 
 
 class Order(models.Model):
+    ORDER_STATUSES = [
+        ('Н', 'Необработан'),
+        ('С', 'Сборка'),
+        ('Д', 'Доставка'),
+        ('В', 'Выполнен')
+    ]
+    status = models.CharField(
+        'статус заказа',
+        max_length=1,
+        choices=ORDER_STATUSES,
+        default='Н',
+        db_index=True
+    )
     firstname = models.CharField(
         'имя клиента',
         max_length=50
