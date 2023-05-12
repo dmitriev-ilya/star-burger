@@ -142,10 +142,21 @@ class Order(models.Model):
         ('Д', 'Доставка'),
         ('В', 'Выполнен')
     ]
+    PAYMENT_METHODS = [
+        ('Э', 'Электронно'),
+        ('Н', 'Наличностью')
+    ]
     status = models.CharField(
         'статус заказа',
         max_length=1,
         choices=ORDER_STATUSES,
+        default='Н',
+        db_index=True
+    )
+    payment_method = models.CharField(
+        'способ оплаты',
+        max_length=1,
+        choices=PAYMENT_METHODS,
         default='Н',
         db_index=True
     )
