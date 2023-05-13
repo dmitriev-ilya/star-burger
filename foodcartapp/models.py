@@ -160,6 +160,14 @@ class Order(models.Model):
         default='Н',
         db_index=True
     )
+    restaurant = models.ForeignKey(
+        Restaurant,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='orders',
+        verbose_name='ресторан'
+    )
     firstname = models.CharField(
         'имя клиента',
         max_length=50
