@@ -42,8 +42,8 @@
             <details open>
               <summary>Доступные рестораны</summary>
               <ul>
-              {% for restaurant in  item.avaliable_restaurants %}
-                <li>{{ restaurant }}</li>
+              {% for restaurant_name, distance in  item.avaliable_restaurants %}
+                <li>{{ restaurant_name }} - {{ distance }} км.</li>
               {% endfor %}
               </ul>
             </details>

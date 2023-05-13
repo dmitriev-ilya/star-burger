@@ -54,10 +54,14 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-Определите переменную окружения `SECRET_KEY`. Создать файл `.env` в каталоге `star_burger/` и положите туда такой код:
+Определите переменные окружения `SECRET_KEY` и `GEOCODER_YANDEX_API_KEY`. Создать файл `.env` в каталоге `star_burger/` и положите туда такой код:
 ```sh
 SECRET_KEY=django-insecure-0if40nf4nf93n4
+GEOCODER_YANDEX_API_KEY=<API KEY Янекс Геокодера>
 ```
+
+Получить `GEOCODER_YANDEX_API_KEY` можно в кабинете разработчика [Яндекса](https://developer.tech.yandex.ru/). В меню выбора API выбираем `JavaScript API и HTTP Геокодер` и заполняем информационную форму.
+
 
 Создайте файл базы данных SQLite и отмигрируйте её следующей командой:
 

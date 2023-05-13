@@ -3,12 +3,13 @@ from django.shortcuts import redirect, render
 from django.views import View
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import user_passes_test
+from django.conf import settings
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import views as auth_views
 
-
 from foodcartapp.models import Product, Restaurant, Order, RestaurantMenuItem
+from .utils import calculate_distance
 
 
 class Login(forms.Form):
@@ -101,6 +102,12 @@ def view_orders(request):
             [item.restaurant for item in product_with_availability.filter(product_id__in=products_in_order)]
         )
 
+        avaliable_restaurants_with_distance = []
+        for restaruant in avaliable_restaurants:
+            restaruant_name = restaruant.name
+            distance_to_order = calculate_distance(order.address, restaruant.address, settings.GEOCODER_YANDEX_API_KEY)
+            avaliable_restaurants_with_distance.append((restaruant_name, distance_to_order))
+
         order_details = {
             'id': order.id,
             'total_price': order.total_price,
@@ -110,7 +117,10 @@ def view_orders(request):
             'status': order.get_status_display(),
             'comment': order.comment,
             'payment_method': order.get_payment_method_display(),
-            'avaliable_restaurants': [restaruant.name for restaruant in avaliable_restaurants],
+            'avaliable_restaurants': sorted(
+                avaliable_restaurants_with_distance,
+                key=lambda restaruant: restaruant[1]
+            ),
             'cooking_in': order.restaurant
         }
         order_items.append(order_details)
