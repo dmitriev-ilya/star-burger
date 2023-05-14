@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth import views as auth_views
 
 from foodcartapp.models import Product, Restaurant, Order, RestaurantMenuItem
-from .utils import calculate_distance
+from geocoder.utils import calculate_distance
 
 
 class Login(forms.Form):
@@ -93,7 +93,7 @@ def view_restaurants(request):
 
 @user_passes_test(is_manager, login_url='restaurateur:login')
 def view_orders(request):
-    orders = Order.objects.exclude(status='В').prefetch_related('products').total_price()
+    orders = Order.objects.exclude(status='В').prefetch_related('products').select_related('restaurant').total_price()
     order_items = []
     product_with_availability = RestaurantMenuItem.objects.filter(availability=True).select_related('restaurant', 'product')
     for order in orders:
