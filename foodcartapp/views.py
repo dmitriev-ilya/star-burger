@@ -5,6 +5,8 @@ from django.db import transaction
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
+from geocoder.utils import create_address
+
 from .models import Product, Order
 from .serializers import OrderSerializer
 
@@ -74,6 +76,7 @@ def register_order(request):
         phonenumber=order_details['phonenumber'],
         address=order_details['address']
     )
+    create_address(order_details['address'])
     for product_detail in order_details['products']:
         product = get_object_or_404(Product, pk=product_detail['product'])
         order.products.create(

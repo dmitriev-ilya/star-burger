@@ -4,6 +4,7 @@ from django.templatetags.static import static
 from django.utils.html import format_html
 from django.utils.http import url_has_allowed_host_and_scheme
 
+from geocoder.utils import create_address
 from .models import Product
 from .models import ProductCategory
 from .models import Restaurant
@@ -34,6 +35,10 @@ class OrderAdmin(admin.ModelAdmin):
         else:
             return response
 
+    def save_model(self, request, obj, form, change):
+        create_address(obj.address)
+        super(OrderAdmin, self).save_model(request, obj, form, change)
+
 
 @admin.register(Restaurant)
 class RestaurantAdmin(admin.ModelAdmin):
@@ -50,6 +55,10 @@ class RestaurantAdmin(admin.ModelAdmin):
     inlines = [
         RestaurantMenuItemInline
     ]
+
+    def save_model(self, request, obj, form, change):
+        create_address(obj.address)
+        super(OrderAdmin, self).save_model(request, obj, form, change)
 
 
 @admin.register(Product)

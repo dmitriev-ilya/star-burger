@@ -1,5 +1,8 @@
+from django.conf import settings
 import requests
 from geopy import distance
+
+from geocoder.models import Address
 
 
 def fetch_coordinates(apikey, address):
@@ -20,9 +23,22 @@ def fetch_coordinates(apikey, address):
     return lat, lon
 
 
-def calculate_distance(address_1, address_2, api_key):
-    address_1_coords = (fetch_coordinates(api_key, address_1))
-    address_2_coords = (fetch_coordinates(api_key, address_2))
-    if address_1_coords and address_2_coords:
+def calculate_distance(address_1, address_2):
+    if address_1.latitude and address_2.latitude:
+        address_1_coords = (address_1.latitude, address_1.longitude)
+        address_2_coords = (address_2.latitude, address_2.longitude)
         return round(distance.distance(address_1_coords, address_2_coords).km, 2)
     return 'Не удалось определить'
+
+
+def create_address(address):
+    address, created = Address.objects.get_or_create(address=address)
+    if created:
+        coordinates = fetch_coordinates(
+            settings.GEOCODER_YANDEX_API_KEY,
+            address.address
+        )
+        if coordinates:
+            address.latitude, address.longitude = coordinates
+            address.save()
+            return

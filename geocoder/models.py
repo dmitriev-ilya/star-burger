@@ -18,7 +18,9 @@ class Address(models.Model):
     latitude = models.DecimalField(
         'широта',
         max_digits=9,
-        decimal_places=6
+        decimal_places=6,
+        null=True,
+        blank=True
     )
     created_at = models.DateTimeField(
         'время создания',

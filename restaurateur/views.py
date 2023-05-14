@@ -3,12 +3,12 @@ from django.shortcuts import redirect, render
 from django.views import View
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import user_passes_test
-from django.conf import settings
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import views as auth_views
 
 from foodcartapp.models import Product, Restaurant, Order, RestaurantMenuItem
+from geocoder.models import Address
 from geocoder.utils import calculate_distance
 
 
@@ -103,9 +103,11 @@ def view_orders(request):
         )
 
         avaliable_restaurants_with_distance = []
+        order_address = Address.objects.get(address=order.address)
         for restaruant in avaliable_restaurants:
             restaruant_name = restaruant.name
-            distance_to_order = calculate_distance(order.address, restaruant.address, settings.GEOCODER_YANDEX_API_KEY)
+            restaruant_address = Address.objects.get(address=restaruant.address)
+            distance_to_order = calculate_distance(order_address, restaruant_address)
             avaliable_restaurants_with_distance.append((restaruant_name, distance_to_order))
 
         order_details = {
