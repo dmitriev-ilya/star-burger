@@ -104,11 +104,11 @@ def view_orders(request):
 
         avaliable_restaurants_with_distance = []
         order_address = Address.objects.get(address=order.address)
-        for restaruant in avaliable_restaurants:
-            restaruant_name = restaruant.name
-            restaruant_address = Address.objects.get(address=restaruant.address)
-            distance_to_order = calculate_distance(order_address, restaruant_address)
-            avaliable_restaurants_with_distance.append((restaruant_name, distance_to_order))
+        for restaurant in avaliable_restaurants:
+            restaurant_name = restaurant.name
+            restaurant_address = Address.objects.get(address=restaurant.address)
+            distance_to_order = calculate_distance(order_address, restaurant_address)
+            avaliable_restaurants_with_distance.append((restaurant_name, distance_to_order))
 
         order_details = {
             'id': order.id,
@@ -121,7 +121,7 @@ def view_orders(request):
             'payment_method': order.get_payment_method_display(),
             'avaliable_restaurants': sorted(
                 avaliable_restaurants_with_distance,
-                key=lambda restaruant: restaruant[1]
+                key=lambda restaurant: restaurant[1]
             ),
             'cooking_in': order.restaurant
         }
