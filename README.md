@@ -58,9 +58,12 @@ pip install -r requirements.txt
 ```sh
 SECRET_KEY=django-insecure-0if40nf4nf93n4
 GEOCODER_YANDEX_API_KEY=<API KEY Янекс Геокодера>
+ROLLBAR_TOKEN=<ROLLBAR_TOKEN>
 ```
 
 Получить `GEOCODER_YANDEX_API_KEY` можно в кабинете разработчика [Яндекса](https://developer.tech.yandex.ru/). В меню выбора API выбираем `JavaScript API и HTTP Геокодер` и заполняем информационную форму.
+
+`ROLLBAR_TOKEN` - токен сервиса для отслеживания ошибок в программном коде веб-приложений [Rollbar](https://rollbar.com/). Перейдите по ссылке, зарегестрируйтесь, при выборе SDK укажите **Django**, на шаге `Set up SDK` ищите строку `access_token` в ней и будет указан ваш токен.
 
 
 Создайте файл базы данных SQLite и отмигрируйте её следующей командой:
