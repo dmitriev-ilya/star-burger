@@ -54,16 +54,19 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-Определите переменные окружения `SECRET_KEY` и `GEOCODER_YANDEX_API_KEY`. Создать файл `.env` в каталоге `star_burger/` и положите туда такой код:
+Определите переменные окружения `SECRET_KEY` и `GEOCODER_YANDEX_API_KEY`, `ROLLBAR_TOKEN`. Создать файл `.env` в каталоге `star_burger/` и положите туда такой код:
 ```sh
 SECRET_KEY=django-insecure-0if40nf4nf93n4
 GEOCODER_YANDEX_API_KEY=<API KEY Янекс Геокодера>
 ROLLBAR_TOKEN=<ROLLBAR_TOKEN>
+ROLLBAR_ENVIRONMENT=development
 ```
 
 Получить `GEOCODER_YANDEX_API_KEY` можно в кабинете разработчика [Яндекса](https://developer.tech.yandex.ru/). В меню выбора API выбираем `JavaScript API и HTTP Геокодер` и заполняем информационную форму.
 
 `ROLLBAR_TOKEN` - токен сервиса для отслеживания ошибок в программном коде веб-приложений [Rollbar](https://rollbar.com/). Перейдите по ссылке, зарегестрируйтесь, при выборе SDK укажите **Django**, на шаге `Set up SDK` ищите строку `access_token` в ней и будет указан ваш токен.
+
+`ROLLBAR_ENVIRONMENT` отвечает за классификацию среды при считывании ошибок в Rollbar и может принимать любое значение.
 
 
 Создайте файл базы данных SQLite и отмигрируйте её следующей командой:
@@ -154,6 +157,7 @@ Parcel будет следить за файлами в каталоге `bundle
 - `DEBUG` — дебаг-режим. Поставьте `False`.
 - `SECRET_KEY` — секретный ключ проекта. Он отвечает за шифрование на сайте. Например, им зашифрованы все пароли на вашем сайте.
 - `ALLOWED_HOSTS` — [см. документацию Django](https://docs.djangoproject.com/en/3.1/ref/settings/#allowed-hosts)
+- `ROLLBAR_ENVIRONMENT=production`
 
 ## Цели проекта
 
