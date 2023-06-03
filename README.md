@@ -54,7 +54,7 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-Определите переменные окружения `SECRET_KEY` и `GEOCODER_YANDEX_API_KEY`, `ROLLBAR_TOKEN`. Создать файл `.env` в каталоге `star_burger/` и положите туда такой код:
+Определите переменные окружения `SECRET_KEY` и `GEOCODER_YANDEX_API_KEY`, `ROLLBAR_TOKEN`, `ROLLBAR_ENVIRONMENT`. Создать файл `.env` в каталоге `star_burger/` и положите туда такой код:
 ```sh
 SECRET_KEY=django-insecure-0if40nf4nf93n4
 GEOCODER_YANDEX_API_KEY=<API KEY Янекс Геокодера>
@@ -68,8 +68,13 @@ ROLLBAR_ENVIRONMENT=development
 
 `ROLLBAR_ENVIRONMENT` отвечает за классификацию среды при считывании ошибок в Rollbar и может принимать любое значение.
 
+Установите PostgreSQL, создайте базу данных и пользователя согласно [туториалу](https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-20-04)
 
-Создайте файл базы данных SQLite и отмигрируйте её следующей командой:
+Определите переменные окружения `DB_NAME`, `DB_USER_NAME`, `DB_USER_PASSWORD` и `DB_HOST` в файле `.env` где:
+- `DB_NAME`, `DB_USER_NAME`, `DB_USER_PASSWORD` - имя базы данных, имя пользователя, пароль пользователя, которые вы задали следуя [туториалу](https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-20-04)
+- `DB_HOST` - адрес хоста где развёрнута база данных.
+
+Сделайте миграцию базы данных:
 
 ```sh
 python manage.py migrate
