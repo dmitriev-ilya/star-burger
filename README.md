@@ -191,6 +191,14 @@ echo "Deployed Successfully!"
 ./deploy_star_burger.sh
 ```
 
+В случае возникновения ошибки `Killed...`, связанной с работой `npm`, создайте файл-подкачки на сервере:
+
+```bash
+ sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=1024
+ sudo /sbin/mkswap /var/swap.1
+ sudo /sbin/swapon /var/swap.1
+```
+
 
 ## Цели проекта
 
