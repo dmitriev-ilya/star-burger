@@ -164,6 +164,42 @@ Parcel будет следить за файлами в каталоге `bundle
 - `ALLOWED_HOSTS` — [см. документацию Django](https://docs.djangoproject.com/en/3.1/ref/settings/#allowed-hosts)
 - `ROLLBAR_ENVIRONMENT=production`
 
+## Автоматизация деплоя
+
+Для автоматизации деплоя создайте `bash-скрипт` с названием `deploy_star_burger.sh` в папке на уровень выше вашего проекта со следующими командами:
+
+```bash
+#!/bin/bash
+set -Eeuo pipefail
+
+/usr/bin/git -C ./star-burger pull
+./star-burger/venv/bin/pip install -r ./star-burger/requirements.txt
+./star-burger/venv/bin/python3 ./star-burger/manage.py migrate
+./star-burger/venv/bin/python3 ./star-burger/manage.py collectstatic
+npm --prefix ./star-burger/ ci --dev
+./star-burger/node_modules/.bin/parcel build ./star-burger/bundles-src/index.js --dist-dir bundles --public-url="./"
+systemctl restart starburger
+systemctl reload nginx
+
+echo "Deployed Successfully!"
+```
+**!ВАЖНО!** Перед запуском проверьте все абсолютные пути в скрипте - они могут отличаться от приведённого примера в зависимости от сборки системы.
+
+Из каталога со скриптом запустите его командой:
+
+```
+./deploy_star_burger.sh
+```
+
+В случае возникновения ошибки `Killed...`, связанной с работой `npm`, создайте файл-подкачки на сервере:
+
+```bash
+ sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=1024
+ sudo /sbin/mkswap /var/swap.1
+ sudo /sbin/swapon /var/swap.1
+```
+
+
 ## Цели проекта
 
 Код написан в учебных целях — это урок в курсе по Python и веб-разработке на сайте [Devman](https://dvmn.org). За основу был взят код проекта [FoodCart](https://github.com/Saibharath79/FoodCart).
