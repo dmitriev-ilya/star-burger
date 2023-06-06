@@ -1,4 +1,4 @@
-# Сайт доставки еды Star Burger
+# Сайт доставки еды [Star Burger](https://dexter-superstar.ru/)
 
 Это сайт сети ресторанов Star Burger. Здесь можно заказать превосходные бургеры с доставкой на дом.
 
@@ -12,6 +12,7 @@
 Второй интерфейс предназначен для менеджера. Здесь происходит обработка заказов. Менеджер видит поступившие новые заказы и первым делом созванивается с клиентом, чтобы подтвердить заказ. После оператор выбирает ближайший ресторан и передаёт туда заказ на исполнение. Там всё приготовят и сами доставят еду клиенту.
 
 Третий интерфейс — это админка. Преимущественно им пользуются программисты при разработке сайта. Также сюда заходит менеджер, чтобы обновить меню ресторанов Star Burger.
+
 
 ## Как запустить dev-версию сайта
 
@@ -184,7 +185,14 @@ npm --prefix ./star-burger/ ci --dev
 systemctl restart starburger
 systemctl reload nginx
 
-echo "Deployed Successfully!"
+source ./star-burger/.env
+git_commit=$(/usr/bin/git -C ./star-burger rev-parse HEAD)
+
+curl -H "X-Rollbar-Access-Token:$ROLLBAR_TOKEN" -H "Content-Type: application/json" -X POST 'https://api.rollbar.com/api/1/deploy'\
+ -d '{"environment":"'$ROLLBAR_ENVIRONMENT'", "revision":"'$git_commit'", "rollbar_name":"'$ROLLBAR_NAME'", "local_username":"'$USER'", "comment": "", "status": "succeeded"}'
+
+echo
+echo "The deployment was successful!"
 ```
 **!ВАЖНО!** Перед запуском проверьте все абсолютные пути в скрипте - они могут отличаться от приведённого примера в зависимости от сборки системы.
 
