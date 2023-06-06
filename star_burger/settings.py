@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 import dj_database_url
 
@@ -50,8 +51,9 @@ MIDDLEWARE = [
 ROLLBAR = {
     'access_token': env('ROLLBAR_TOKEN'),
     'environment': env('ROLLBAR_ENVIRONMENT'),
-    'code_version': '1.0',
+    'code_version': subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('ascii').strip(),
     'root': BASE_DIR,
+    'branch': 'master'
 }
 
 ROOT_URLCONF = 'star_burger.urls'
