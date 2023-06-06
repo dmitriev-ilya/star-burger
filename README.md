@@ -54,12 +54,13 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-Определите переменные окружения `SECRET_KEY` и `GEOCODER_YANDEX_API_KEY`, `ROLLBAR_TOKEN`, `ROLLBAR_ENVIRONMENT`. Создать файл `.env` в каталоге `star_burger/` и положите туда такой код:
+Определите переменные окружения `SECRET_KEY` и `GEOCODER_YANDEX_API_KEY`, `ROLLBAR_TOKEN`, `ROLLBAR_ENVIRONMENT`, `ROLLBAR_NAME`. Создать файл `.env` в каталоге `star_burger/` и положите туда такой код:
 ```sh
 SECRET_KEY=django-insecure-0if40nf4nf93n4
 GEOCODER_YANDEX_API_KEY=<API KEY Янекс Геокодера>
-ROLLBAR_TOKEN=<ROLLBAR_TOKEN>
-ROLLBAR_ENVIRONMENT=development
+export ROLLBAR_TOKEN=<ROLLBAR_TOKEN>
+export ROLLBAR_ENVIRONMENT=development
+export ROLLBAR_NAME=<ROLLBAR_NAME>
 ```
 
 Получить `GEOCODER_YANDEX_API_KEY` можно в кабинете разработчика [Яндекса](https://developer.tech.yandex.ru/). В меню выбора API выбираем `JavaScript API и HTTP Геокодер` и заполняем информационную форму.
@@ -67,6 +68,8 @@ ROLLBAR_ENVIRONMENT=development
 `ROLLBAR_TOKEN` - токен сервиса для отслеживания ошибок в программном коде веб-приложений [Rollbar](https://rollbar.com/). Перейдите по ссылке, зарегестрируйтесь, при выборе SDK укажите **Django**, на шаге `Set up SDK` ищите строку `access_token` в ней и будет указан ваш токен.
 
 `ROLLBAR_ENVIRONMENT` отвечает за классификацию среды при считывании ошибок в Rollbar и может принимать любое значение.
+
+`ROLLBAR_NAME` - имя пользователя в Rollbar.
 
 Установите PostgreSQL, создайте базу данных и пользователя согласно [туториалу](https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-20-04)
 
