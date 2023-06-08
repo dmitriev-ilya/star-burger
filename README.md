@@ -170,37 +170,12 @@ Parcel будет следить за файлами в каталоге `bundle
 
 ## Автоматизация деплоя
 
-Для автоматизации деплоя создайте `bash-скрипт` с названием `deploy_star_burger.sh` в папке на уровень выше вашего проекта со следующими командами:
+Для автоматизации деплоя запустите `bash-скрипт` с названием `deploy_star_burger.sh` из папки с проектом со следующей командой:
 
 ```bash
-#!/bin/bash
-set -Eeuo pipefail
-
-/usr/bin/git -C ./star-burger pull
-./star-burger/venv/bin/pip install -r ./star-burger/requirements.txt
-./star-burger/venv/bin/python3 ./star-burger/manage.py migrate
-./star-burger/venv/bin/python3 ./star-burger/manage.py collectstatic
-npm --prefix ./star-burger/ ci --dev
-./star-burger/node_modules/.bin/parcel build ./star-burger/bundles-src/index.js --dist-dir bundles --public-url="./"
-systemctl restart starburger
-systemctl reload nginx
-
-source ./star-burger/.env
-git_commit=$(/usr/bin/git -C ./star-burger rev-parse HEAD)
-
-curl -H "X-Rollbar-Access-Token:$ROLLBAR_TOKEN" -H "Content-Type: application/json" -X POST 'https://api.rollbar.com/api/1/deploy'\
- -d '{"environment":"'$ROLLBAR_ENVIRONMENT'", "revision":"'$git_commit'", "rollbar_name":"'$ROLLBAR_NAME'", "local_username":"'$USER'", "comment": "", "status": "succeeded"}'
-
-echo
-echo "The deployment was successful!"
-```
-**!ВАЖНО!** Перед запуском проверьте все абсолютные пути в скрипте - они могут отличаться от приведённого примера в зависимости от сборки системы.
-
-Из каталога со скриптом запустите его командой:
-
-```
 ./deploy_star_burger.sh
 ```
+**!ВАЖНО!** Перед запуском проверьте все абсолютные пути в скрипте - они могут отличаться от приведённого примера в зависимости от сборки системы.
 
 В случае возникновения ошибки `Killed...`, связанной с работой `npm`, создайте файл-подкачки на сервере:
 
