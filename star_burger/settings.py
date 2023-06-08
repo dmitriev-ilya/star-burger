@@ -49,8 +49,8 @@ MIDDLEWARE = [
 ]
 
 ROLLBAR = {
-    'access_token': env('ROLLBAR_TOKEN'),
-    'environment': env('ROLLBAR_ENVIRONMENT'),
+    'access_token': env('ROLLBAR_TOKEN', 'token_unknown'),
+    'environment': env('ROLLBAR_ENVIRONMENT', 'development'),
     'code_version': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=BASE_DIR).decode('ascii').strip(),
     'root': BASE_DIR,
     'branch': 'master'
