@@ -4,7 +4,7 @@ set -Eeuo pipefail
 /usr/bin/git -C ./star-burger pull
 ./star-burger/venv/bin/pip install -r ./star-burger/requirements.txt
 ./star-burger/venv/bin/python3 ./star-burger/manage.py migrate
-./star-burger/venv/bin/python3 ./star-burger/manage.py collectstatic
+./star-burger/venv/bin/python3 ./star-burger/manage.py collectstatic --noinput
 npm --prefix ./star-burger/ ci --dev
 ./star-burger/node_modules/.bin/parcel build ./star-burger/bundles-src/index.js --dist-dir bundles --public-url="./"
 systemctl daemon-reload
