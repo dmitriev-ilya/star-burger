@@ -74,9 +74,9 @@ export ROLLBAR_NAME=<ROLLBAR_NAME>
 
 Установите PostgreSQL, создайте базу данных и пользователя согласно [туториалу](https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-20-04)
 
-Определите переменные окружения `DB_NAME`, `DB_USER_NAME`, `DB_USER_PASSWORD` и `DB_HOST` в файле `.env` где:
-- `DB_NAME`, `DB_USER_NAME`, `DB_USER_PASSWORD` - имя базы данных, имя пользователя, пароль пользователя, которые вы задали следуя [туториалу](https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-20-04)
-- `DB_HOST` - адрес хоста где развёрнута база данных.
+Определите переменную окружения `DB_URL` в формате `postgres://USER:PASSWORD@HOST:PORT/NAME`, где `NAME` - имя базы данных, `USER` - имя пользователя, `PASSWORD` - пароль пользователя, которые вы задали следуя [туториалу](https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-20-04), `HOST` - адрес хоста где развёрнута база данных, `PORT` - номер порта.
+
+Подробонее о `DB_URL` [тут](https://github.com/jazzband/dj-database-url).
 
 Сделайте миграцию базы данных:
 
