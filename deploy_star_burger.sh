@@ -3,7 +3,7 @@ set -Eeuo pipefail
 
 /usr/bin/git -C ./ pull
 ./venv/bin/pip install -r ./requirements.txt
-./venv/bin/python3 ./manage.py migrate
+./venv/bin/python3 ./manage.py migrate --noinput
 ./venv/bin/python3 ./manage.py collectstatic --noinput
 npm --prefix ./ ci --dev
 ./node_modules/.bin/parcel build ./bundles-src/index.js --dist-dir bundles --public-url="./"
